@@ -2,10 +2,12 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DashboardPage from './pages/DashboardPage';
 import ProfilesPage from './pages/ProfilesPage';
+import TopNav from './components/TopNav';
 
 function App() {
   return (
     <Router>
+      <TopNav />
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/profiles" element={<ProfilesPage />} />
@@ -16,16 +18,3 @@ function App() {
 }
 
 export default App;
-
-// Navigation component example
-// components/Navigation.tsx
-import { Link } from 'react-router-dom';
-
-export function Navigation() {
-  return (
-    <nav>
-      <Link to="/">Dashboard</Link>
-      <Link to="/profiles">Profiles</Link>
-    </nav>
-  );
-}

@@ -1,0 +1,12 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+bin = "./tmp/main"
+cmd = "./prebuild.sh && go build -o ./tmp/main ./cmd"
+exclude_dir = ["tmp", "frontend/node_modules", "frontend/dist"]
+include_ext = ["go", "tsx", "ts"]
+stop_on_error = true
+
+[log]
+time = false

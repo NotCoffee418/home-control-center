@@ -33,3 +33,4 @@ go.work.sum
 
 # Custom
 __debug_bin*
+tmp/*

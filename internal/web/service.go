@@ -1,9 +1,11 @@
 package web
 
 import (
+	"io"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	root "github.com/NotCoffee418/home-control-center"
 	"github.com/go-chi/chi/v5"
@@ -40,8 +42,31 @@ func StartWebServer() {
 	// API routes
 	setupAPIRoutes(r)
 
-	// Serve React app - handle everything else
-	r.Handle("/*", http.FileServer(http.FS(frontendFS)))
+	// Serve static assets first
+	r.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.FS(frontendFS))))
+
+	// Catch-all: serve index.html for all other routes (React Router)
+	r.Get("/*", func(w http.ResponseWriter, r *http.Request) {
+		// Try to open the requested file
+		file, err := frontendFS.Open(strings.TrimPrefix(r.URL.Path, "/"))
+		if err == nil {
+			file.Close()
+			// File exists, serve it normally
+			http.FileServer(http.FS(frontendFS)).ServeHTTP(w, r)
+			return
+		}
+
+		// File doesn't exist, serve index.html (React Router will handle it)
+		indexFile, err := frontendFS.Open("index.html")
+		if err != nil {
+			http.Error(w, "Frontend not found", 404)
+			return
+		}
+		defer indexFile.Close()
+
+		w.Header().Set("Content-Type", "text/html")
+		io.Copy(w, indexFile)
+	})
 
 	// Bind to localhost in development, all interfaces in production
 	var addr string

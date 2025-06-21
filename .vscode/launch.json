@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Build & Launch (Windows)",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/main.go",
+            "envFile": "${workspaceFolder}/.env",
+            "console": "integratedTerminal",
+            "preLaunchTask": "buildFrontendWindows"
+        },
+        {
+            "name": "Build & Launch (Unix)",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "${workspaceFolder}/cmd/main.go",
+            "envFile": "${workspaceFolder}/.env",
+            "console": "integratedTerminal",
+            "preLaunchTask": "buildFrontendUnix"
+        }
+    ]
+}

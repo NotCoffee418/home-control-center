@@ -68,15 +68,7 @@ func StartWebServer() {
 		io.Copy(w, indexFile)
 	})
 
-	// Bind to localhost in development, all interfaces in production
-	var addr string
-	if os.Getenv("GO_ENV") == "production" {
-		addr = ":" + port
-		log.Printf("Server starting on all interfaces, port %s", port)
-	} else {
-		addr = "127.0.0.1:" + port
-		log.Printf("Server starting on localhost:%s (development mode)", port)
-	}
-
-	log.Fatal(http.ListenAndServe(addr, r))
+	// for now bind to 9040 (needs to be changed to port from config)
+	log.Printf("Server starting on all interfaces, port %s", port)
+	log.Fatal(http.ListenAndServe(":9040", r))
 }

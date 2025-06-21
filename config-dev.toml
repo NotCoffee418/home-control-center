@@ -1,4 +1,4 @@
 
-database_path = "./home-control-center-dev.db"
+database_path = "../home-control-center-dev.db"
 listen_address = "127.0.0.1"
 listen_port = 9040

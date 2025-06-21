@@ -1,6 +1,7 @@
 package web
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -8,6 +9,7 @@ import (
 	"strings"
 
 	root "github.com/NotCoffee418/home-control-center"
+	"github.com/NotCoffee418/home-control-center/internal/config"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
@@ -68,7 +70,9 @@ func StartWebServer() {
 		io.Copy(w, indexFile)
 	})
 
-	// for now bind to 9040 (needs to be changed to port from config)
-	log.Printf("Server starting on all interfaces, port %s", port)
-	log.Fatal(http.ListenAndServe(":9040", r))
+	// Get config and start server
+	config := config.GetConfig()
+	listener := fmt.Sprintf("%s:%d", config.ListenAddress, config.ListenPort)
+	log.Printf("Server starting on %s", listener)
+	log.Fatal(http.ListenAndServe(listener, r))
 }

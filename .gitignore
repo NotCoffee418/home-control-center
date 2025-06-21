@@ -34,3 +34,4 @@ go.work.sum
 # Custom
 __debug_bin*
 tmp/*
+home-control-center-dev.db

@@ -25,17 +25,20 @@ func StartWebServer() {
 	// Create chi router
 	r := chi.NewRouter()
 
-	// Optional middleware (comment out if you want minimal)
-	r.Use(middleware.Logger)
-	r.Use(middleware.Recoverer)
+	// Production vs development middleware
+	if os.Getenv("GO_ENV") == "production" {
+		// Production: minimal middleware
+		r.Use(middleware.Recoverer)
+		r.Use(middleware.Compress(5)) // gzip compression
+	} else {
+		// Development: more verbose
+		r.Use(middleware.Logger)
+		r.Use(middleware.Recoverer)
+		r.Use(middleware.RequestID)
+	}
 
 	// API routes
-	r.Route("/api", func(r chi.Router) {
-		r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
-			w.Header().Set("Content-Type", "application/json")
-			w.Write([]byte(`{"status":"ok"}`))
-		})
-	})
+	setupAPIRoutes(r)
 
 	// Serve React app - handle everything else
 	r.Handle("/*", http.FileServer(http.FS(frontendFS)))

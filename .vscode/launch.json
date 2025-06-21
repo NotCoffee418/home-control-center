@@ -19,7 +19,8 @@
             "program": "${workspaceFolder}/cmd/main.go",
             "envFile": "${workspaceFolder}/.env",
             "console": "integratedTerminal",
-            "preLaunchTask": "buildFrontendUnix"
+            "preLaunchTask": "buildFrontendUnix",
+            "internalConsoleOptions": "neverOpen"
         }
     ]
 }

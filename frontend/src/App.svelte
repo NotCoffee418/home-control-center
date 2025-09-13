@@ -1,47 +1,72 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import viteLogo from '/vite.svg'
-  import Counter from './lib/Counter.svelte'
+  import './assets/css/base.css';
+  import Navbar from './lib/components/Navbar.svelte';
+  import { onMount } from 'svelte';
+  
+  // Import your route components
+  import HomePage from './lib/routes/HomePage.svelte';
+  import SettingsPage from './lib/routes/SettingsPage.svelte';
+
+  // Simple hash-based routing that maintains component state
+  let currentRoute = $state('/');
+
+  // Components are rendered once and kept alive
+  const components = {
+    '/': { component: HomePage, instance: null },
+    '/settings': { component: SettingsPage, instance: null }
+  };
+
+  // Hash-based routing
+  function updateRoute() {
+    const hash = window.location.hash.replace('#', '') || '/';
+    if (components[hash]) {
+      currentRoute = hash;
+    }
+  }
+
+  onMount(() => {
+    // Setup hash routing
+    updateRoute();
+    window.addEventListener('hashchange', updateRoute);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('hashchange', updateRoute);
+    };
+  });
 </script>
 
-<main>
-  <div>
-    <a href="https://vite.dev" target="_blank" rel="noreferrer">
-      <img src={viteLogo} class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte</h1>
-
-  <div class="card">
-    <Counter />
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
-</main>
+<div class="app">
+  <Navbar {currentRoute} />
+  <main>
+    {#each Object.entries(components) as [path, { component: Component }]}
+      <div class="route-container" class:active={currentRoute === path}>
+        <Component />
+      </div>
+    {/each}
+  </main>
+</div>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
+  .app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
+
+  main {
+    flex: 1;
+    padding: 1.5rem;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    position: relative;
   }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
+
+  .route-container {
+    display: none;
   }
-  .read-the-docs {
-    color: #888;
+
+  .route-container.active {
+    display: block;
   }
 </style>

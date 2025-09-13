@@ -73,6 +73,6 @@ func StartWebServer() {
 	// Get config and start server
 	config := config.GetConfig()
 	listener := fmt.Sprintf("%s:%d", config.ListenAddress, config.ListenPort)
-	log.Printf("Server starting on %s", listener)
+	log.Printf("Server starting on http://%s", listener)
 	log.Fatal(http.ListenAndServe(listener, r))
 }

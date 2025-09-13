@@ -7,7 +7,7 @@ Home Control Center is a centralized application that integrates smart meter rea
 ## Tech Stack
 
 - **Backend**: Go 1.21+ with embedded static file serving
-- **Frontend**: React + TypeScript + Vite + Mantine UI + React Router
+- **Frontend**: Svelte 5 + TypeScript + Vite + SvelteKit (or vanilla Svelte 5 with routing)
 - **Build Process**: Frontend builds to `frontend/dist/`, embedded into Go binary
 - **Database**: SQLite (inferred from typical Go projects)
 - **Configuration**: TOML format at `/etc/home-control-center/config.toml`
@@ -17,7 +17,7 @@ Home Control Center is a centralized application that integrates smart meter rea
 
 The project uses a hybrid build approach:
 
-1. **prebuild.sh**: Automatically detects React in `frontend/` directory and runs:
+1. **prebuild.sh**: Automatically detects Svelte 5 in `frontend/` directory and runs:
    - `npm install` (if node_modules missing)
    - `npm run build` to generate `frontend/dist/`
 2. **Go Build**: Embeds `frontend/dist/` files using Go's embed functionality
@@ -46,13 +46,22 @@ The project uses a hybrid build approach:
 
 ## Development Notes
 
-### Frontend Development
+### Frontend Development - Svelte 5 Specific
 
+- **IMPORTANT**: This project uses Svelte 5 with the new runes system
 - Located in `frontend/` directory
 - Run `npm install && npm run dev` for development server
-- Mantine provides UI components - prefer using existing components
+- Use Svelte 5 runes syntax:
+  - `$state()` for reactive state
+  - `$derived()` for computed values
+  - `$effect()` for side effects
+  - `$props()` for component props
+- **DO NOT** use legacy Svelte syntax (let, $:, export let)
+- **DO NOT** suggest React patterns like useState, useEffect, etc.
 - TypeScript strict mode enabled
-- React Router handles client-side routing
+- Use native browser APIs or lightweight libraries instead of heavy frameworks
+- For routing: either SvelteKit or simple hash/history API routing
+- For UI components: prefer lightweight CSS frameworks or custom components
 
 ### Backend Development
 
@@ -72,7 +81,7 @@ The project uses a hybrid build approach:
 ### Testing Approach
 
 - Go: Standard `go test` framework
-- Frontend: Jest + React Testing Library
+- Frontend: Vitest + @testing-library/svelte
 - API: Health check at `/api/health` for basic connectivity
 - Integration: Test external device communication carefully
 
@@ -91,15 +100,14 @@ The project uses a hybrid build approach:
 - Graceful shutdown handling for device connections
 - Network connectivity required for weather and external device APIs
 
-## Error Handling Patterns
+## Svelte 5 Development Patterns
 
-- Graceful degradation when external devices unavailable
-- Retry logic for network-dependent operations
-- User-friendly error messages in frontend
-- Structured logging for debugging
+### State Management
+```javascript
+// Use $state() for reactive variables
+let count = $state(0);
+let items = $state([]);
 
-## Security Notes
-
-- Internal network deployment assumed
-- HTTPS recommended if exposed externally
-- Input validation on all API endpoints
+// Use $derived() for computed values
+let doubled = $derived(count * 2);
+let filteredItems = $derived(items.filter(item => item.active));

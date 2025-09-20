@@ -103,6 +103,7 @@ The project uses a hybrid build approach:
 ## Svelte 5 Development Patterns
 
 ### State Management
+
 ```javascript
 // Use $state() for reactive variables
 let count = $state(0);
@@ -110,4 +111,5 @@ let items = $state([]);
 
 // Use $derived() for computed values
 let doubled = $derived(count * 2);
-let filteredItems = $derived(items.filter(item => item.active));
+let filteredItems = $derived(items.filter((item) => item.active));
+```

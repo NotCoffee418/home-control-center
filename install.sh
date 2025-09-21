@@ -87,6 +87,14 @@ cat > "$CONFIG_FILE" << EOF
 database_path = "$DB_PATH"
 listen_address = "$LISTEN_ADDRESS"
 listen_port = $LISTEN_PORT
+
+# Smart Meter API endpoint - single endpoint
+# smart_meter_api_endpoint = "http://192.168.1.200/api/meter"
+
+# AC Controller endpoints - multiple devices supported
+[ac_controller_endpoints]
+# "DeviceName" = "http://192.168.1.100/api"
+# "AnotherDevice" = "http://192.168.1.101/api"
 EOF
 fi
 

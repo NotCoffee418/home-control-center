@@ -9,6 +9,28 @@ import (
 	"github.com/NotCoffee418/home-control-center/internal/config"
 )
 
+// ACMode represents the AC operation mode
+type ACMode string
+
+const (
+	ACModeOff  ACMode = "off"
+	ACModeCool ACMode = "cool"
+	ACModeHeat ACMode = "heat"
+	ACModeAuto ACMode = "auto"
+	ACModeFan  ACMode = "fan"
+	ACModeDry  ACMode = "dry"
+)
+
+// ACFanSpeed represents the AC fan speed setting
+type ACFanSpeed string
+
+const (
+	ACFanSpeedAuto   ACFanSpeed = "auto"
+	ACFanSpeedLow    ACFanSpeed = "low"
+	ACFanSpeedMedium ACFanSpeed = "medium"
+	ACFanSpeedHigh   ACFanSpeed = "high"
+)
+
 // APIService provides access to external API endpoints
 type APIService struct {
 	client HTTPClient
@@ -23,31 +45,22 @@ func NewAPIService() *APIService {
 	}
 }
 
-// NewAPIServiceWithTimeout creates a new API service with custom timeout
-func NewAPIServiceWithTimeout(timeout time.Duration) *APIService {
-	return &APIService{
-		client: NewHTTPClient(timeout),
-		config: config.GetConfig(),
-	}
-}
-
 // ACControlRequest represents a request to control an air conditioning unit
 type ACControlRequest struct {
-	Temperature int    `json:"temperature,omitempty"`
-	Mode        string `json:"mode,omitempty"`        // e.g., "cool", "heat", "auto", "fan", "dry"
-	Power       bool   `json:"power"`                 // true = on, false = off
-	FanSpeed    string `json:"fan_speed,omitempty"`   // e.g., "low", "medium", "high", "auto"
+	Temperature int        `json:"temperature,omitempty"`
+	Mode        ACMode     `json:"mode,omitempty"`
+	Power       bool       `json:"power"`
+	FanSpeed    ACFanSpeed `json:"fan_speed,omitempty"`
 }
 
 // ACStatusResponse represents the response from AC controller status endpoint
-// Note: Actual response structure needs to be confirmed with ESP32 implementation
 type ACStatusResponse struct {
-	DeviceID    string `json:"device_id"`
-	Temperature int    `json:"temperature"`
-	Mode        string `json:"mode"`
-	Power       bool   `json:"power"`
-	FanSpeed    string `json:"fan_speed"`
-	Online      bool   `json:"online"`
+	DeviceID    string     `json:"device_id"`
+	Temperature int        `json:"temperature"`
+	Mode        ACMode     `json:"mode"`
+	Power       bool       `json:"power"`
+	FanSpeed    ACFanSpeed `json:"fan_speed"`
+	Online      bool       `json:"online"`
 }
 
 // SmartMeterResponse represents the response from smart meter API

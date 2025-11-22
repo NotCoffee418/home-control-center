@@ -1,3 +1,11 @@
+# ⚠️ DEPRECATED - This Repository is Archived
+
+**This repository has been replaced by [power_control_center](https://github.com/NotCoffee418/power_control_center)**
+
+Please use the new repository for all future development and installations.
+
+---
+
 # Home Control Center
 
 Home control center is a custom application to display smart meter settings and control airconditioning.
